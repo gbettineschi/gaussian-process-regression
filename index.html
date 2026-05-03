@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaussian Process Regression</title>
+  <link rel="stylesheet" href="src/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <h1>Gaussian Process Regression</h1>
+    <p>Click the canvas to place observations &mdash; right-click or double-click to remove</p>
+  </header>
+
+  <div id="main">
+
+    <div id="canvas-wrap">
+      <canvas id="gp-canvas"></canvas>
+    </div>
+
+    <aside id="controls">
+
+      <div class="ctrl-group">
+        <label>Kernel</label>
+        <div class="kernel-toggle">
+          <button class="kernel-btn active" data-kernel="rbf">RBF</button>
+          <button class="kernel-btn"        data-kernel="exp">Exp</button>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Amplitude</label>
+        <div class="slider-row">
+          <span>a</span>
+          <span class="val" id="val-amplitude">1.00</span>
+        </div>
+        <input id="slider-amplitude" type="range"
+               min="0.1" max="3" step="0.05" value="1.0" />
+      </div>
+
+      <div class="ctrl-group">
+        <label>Length scale</label>
+        <div class="slider-row">
+          <span>l</span>
+          <span class="val" id="val-lengthscale">0.30</span>
+        </div>
+        <input id="slider-lengthscale" type="range"
+               min="0.05" max="1.0" step="0.01" value="0.3" />
+      </div>
+
+      <div class="ctrl-group">
+        <label>Noise</label>
+        <div class="slider-row">
+          <span>&sigma;</span>
+          <span class="val" id="val-noise">0.05</span>
+        </div>
+        <input id="slider-noise" type="range"
+               min="0.01" max="0.8" step="0.01" value="0.05" />
+      </div>
+
+      <div class="ctrl-group">
+        <label>Legend</label>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:#7eaaff"></div>
+            <span>Posterior mean</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:rgba(100,149,237,0.5);height:8px"></div>
+            <span>Uncertainty (±2&sigma;)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:rgba(120,165,255,0.5)"></div>
+            <span>Sample paths</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ff7070"></div>
+            <span>Observations</span>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-clear">Clear observations</button>
+
+    </aside>
+  </div>
+
+</div>
+
+<!-- Loading overlay -->
+<div id="loading">
+  <div id="loading-box">
+    <div id="loading-spinner"></div>
+    <div id="loading-status">Loading Pyodide&hellip;</div>
+    <div id="loading-sub">Python is running in your browser via WebAssembly</div>
+  </div>
+</div>
+
+<script>
+async function main() {
+  const status = document.getElementById("loading-status");
+
+  const pyodide = await loadPyodide();
+
+  status.textContent = "Loading NumPy…";
+  await pyodide.loadPackage("numpy");
+
+  status.textContent = "Starting GP engine…";
+  const appCode = await (await fetch("src/py/app.py")).text();
+  await pyodide.runPythonAsync(appCode);
+
+  document.getElementById("loading").style.display = "none";
+}
+
+main().catch(err => {
+  document.getElementById("loading-status").textContent = "Error: " + err.message;
+  document.getElementById("loading-spinner").style.display = "none";
+  console.error(err);
+});
+</script>
+</body>
+</html>
