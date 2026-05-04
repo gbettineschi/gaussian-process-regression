@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaussian Process Regression</title>
+  <link rel="stylesheet" href="./ui/style.css" />
+</head>
+<body>
+
+  <header id="topbar">
+    <p class="topbar-title">Gaussian process regression <span class="repo-by">by Gabriele Bettineschi</span></p>
+    <a href="https://github.com/gbettineschi/gaussian-kernel-plot"
+       class="topbar-link" target="_blank" rel="noopener">↗ GitHub</a>
+  </header>
+
+  <div id="layout">
+
+    <div id="canvas-wrap">
+      <canvas id="gp-canvas"></canvas>
+    </div>
+
+    <aside id="panel">
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Kernel</span>
+        <div class="kernel-toggle">
+          <button class="kernel-btn btn active" data-kernel="rbf">RBF <span class="kernel-hint">smoother</span></button>
+          <button class="kernel-btn btn"        data-kernel="exp">Exponential <span class="kernel-hint">rougher</span></button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-header">
+          <span class="ctrl-label">Amplitude</span>
+          <span class="ctrl-val" id="val-amplitude">1.00</span>
+        </div>
+        <input id="slider-amplitude" type="range" class="slider"
+               min="0.1" max="3" step="0.05" value="1.0" />
+      </div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-header">
+          <span class="ctrl-label">Length scale</span>
+          <span class="ctrl-val" id="val-lengthscale">0.30</span>
+        </div>
+        <input id="slider-lengthscale" type="range" class="slider"
+               min="0.05" max="1.0" step="0.01" value="0.3" />
+      </div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-header">
+          <span class="ctrl-label">Noise &sigma;</span>
+          <span class="ctrl-val" id="val-noise">0.05</span>
+        </div>
+        <input id="slider-noise" type="range" class="slider"
+               min="0.01" max="0.8" step="0.01" value="0.05" />
+      </div>
+
+      <div class="divider"></div>
+
+      <button id="btn-clear" class="btn">Clear observations</button>
+
+      <div class="divider"></div>
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Legend</span>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:#7eaaff"></div>
+            <span>Posterior mean</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:rgba(100,149,237,0.4);height:8px"></div>
+            <span>Uncertainty &plusmn;2&sigma;</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch" style="background:rgba(120,165,255,0.4)"></div>
+            <span>Sample paths</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot"></div>
+            <span>Observations</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- Loading overlay (hidden once Pyodide is ready) -->
+  <div id="loading">
+    <div id="loading-box">
+      <div id="loading-spinner"></div>
+      <div id="loading-status">Loading Pyodide&hellip;</div>
+      <div id="loading-sub">Python is running in your browser via WebAssembly</div>
+    </div>
+  </div>
+
+  <script type="module" src="./ui/app.js"></script>
+
+</body>
+</html>
