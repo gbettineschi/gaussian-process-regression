@@ -2,29 +2,15 @@
 
 # Gaussian Process Regression
 
-Most models give you a single prediction. A Gaussian Process gives you a *distribution over functions* — before any data, it holds every plausible curve in mind at once. Click to place observations and watch it update in real time: uncertainty collapses where you've looked, and expands where you haven't.
+A Gaussian process regression starts with a prior distribution over functions and updates it with data, concentrating it on the functions that are probable given that data. 
 
-## Theory
+This program plots the mean (a function) and some samples (some functions) of said distirbution. You can click on the canvas to place observations and watch the distribution update in real time.
 
-**Prior over functions.** A GP is fully defined by a mean function (assumed zero here) and a kernel. The kernel k(x, x') encodes how correlated two function values should be — it is the model's prior belief about the shape of the unknown function.
+##  Some explanations
 
-Two kernels are available:
+The kernel of a gaussain process defines the class of functions that the process can represent. In this program, the exponential and the radial basis function (RBF) kernel are available. 
 
-| Kernel | Formula | Character |
-|--------|---------|-----------|
-| RBF | `k(x,x') = a · exp(-(x-x')² / 2l²)` | Infinitely smooth |
-| Exponential | `k(x,x') = a · exp(-\|x-x'\| / l)` | Rougher, slight kinks at observations |
-
-Amplitude `a` sets the vertical scale; length scale `l` controls wiggliness — small `l` gives rapidly varying functions, large `l` gives slowly varying ones.
-
-**Bayesian update.** When you place an observation, the GP conditions on it analytically. Given training points X with values y and test points X*, the posterior mean and covariance are:
-
-```
-μ*  = K(X*, X) · [K(X, X) + σ²I]⁻¹ · y
-Σ*  = K(X*, X*) − K(X*, X) · [K(X, X) + σ²I]⁻¹ · K(X, X*)
-```
-
-The noise parameter σ controls how strictly the model commits to passing through your points. Low noise → tight interpolation; high noise → smooth regression that trades fit for certainty.
+There are some parameters you can set, that control the typical function: amplitude sets the vertical scale, length scale sets how far orizontally values are correlated, noise controls how strictly values adhere to data.
 
 **Calibrated uncertainty.** The shaded bands show ±1σ and ±2σ. This is the practical power of GPs: they always know what they don't know. Far from any observation the uncertainty is high; near observations it collapses. This makes GPs valuable in Bayesian optimization, scientific modeling, and engineering surrogates where data is scarce and overconfidence is costly.
 
@@ -47,15 +33,3 @@ Install dependencies and run `main.py` directly. Visualization is through Matplo
 uv sync
 uv run main.py
 ```
-
-## Controls
-
-| Action | Effect |
-|--------|--------|
-| Click canvas | Add observation |
-| Drag a point | Move observation |
-| Right-click / double-click | Remove observation |
-| Clear button | Reset to prior |
-| Kernel toggle | Switch RBF ↔ Exponential |
-| Amplitude / Length scale | Adjust kernel shape |
-| Noise slider | Set observation noise σ |
