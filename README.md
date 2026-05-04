@@ -1,6 +1,6 @@
 **[→ Live demo](https://gabrielebettineschi.com/gaussian-kernel-plot)**
 
-# Gaussian Process Regression
+# Gaussian process regression
 
 A Gaussian process regression starts with a prior distribution over functions and updates it with data, concentrating it on the functions that are probable given that data. 
 
