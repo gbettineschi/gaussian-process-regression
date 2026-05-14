@@ -6,14 +6,6 @@ A Gaussian process regression starts with a prior distribution over functions an
 
 This program plots the mean (a function) and some samples (some functions) of said distirbution. You can click on the canvas to place observations and watch the distribution update in real time.
 
-##  Some explanations
-
-The kernel of a gaussain process defines the class of functions that the process can represent. In this program, the exponential and the radial basis function (RBF) kernel are available. 
-
-There are some parameters you can set, that control the typical function: amplitude sets the vertical scale, length scale sets how far orizontally values are correlated, noise controls how strictly values adhere to data.
-
-**Calibrated uncertainty.** The shaded bands show ±1σ and ±2σ. This is the practical power of GPs: they always know what they don't know. Far from any observation the uncertainty is high; near observations it collapses. This makes GPs valuable in Bayesian optimization, scientific modeling, and engineering surrogates where data is scarce and overconfidence is costly.
-
 ## Run locally
 
 **In the browser**
